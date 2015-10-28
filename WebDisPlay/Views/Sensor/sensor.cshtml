@@ -15,6 +15,7 @@
     
     <link rel="stylesheet" href="../../Content/amazeui.switch.css" />
     <link rel="stylesheet" href="../../Content/amazeui.min.css" />
+    <link rel="stylesheet" href="../../Content/amazeui.css" />
     <script src="../../Scripts/amazeui.switch.js"></script>
     <script src="../../Scripts/amazeui.switch.min.js"></script>
     <script src="../../Scripts/amazeui.min.js"></script>
@@ -23,19 +24,42 @@
     <script src="../../Scripts/switchery.js"></script>
     
   
-    <script src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
-    <script src="http://static.fusioncharts.com/code/latest/fusioncharts.charts.js"></script>
-    <script src="http://static.fusioncharts.com/code/latest/fusioncharts.widgets.js"></script>
-    <script src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js"></script>
+    <script src="../../Scripts/fusioncharts.js"></script>
+    <script src="../../Scripts/fusioncharts.charts.js"></script>
+    <script src="../../Scripts/fusioncharts.widgets.js"></script>
+    <script src="../../Scripts/fusioncharts.theme.fint.js"></script>
    
-    <script type="text/javascript" language="javascript" src ="../../Scripts/sensordis.js" charset="gb2312"></script>     
+    <script type="text/javascript" language="javascript" src ="../../Scripts/sensordis.js" charset="gb2312"></script>    
+  <style type="text/css">
+      .amz-banner {
+          background-color : #f8f3f3;
+          height : 220px;
+          margin : auto;
+          background-image :
+      }
+  </style>
 
 </head>
+
 <body>
+    <header class="am-topbar am-topbar-inverse" style="margin:auto">
+        <h1 class="am-topbar-brand">
+            <a href="#" >Smart Transducer Network Platform</a>
+        </h1>
+        
+    </header>
+    <div class="amz-banner">
+        <div class="amz-container" style="padding-left:10%;padding-top:4%;" data-am-scrollspy="{animation: 'scale-up', repeat: false}">
+
+            <h1>STNP 监控平台</h1>
+            <p>显示传感器的采样信息、控制作动器作动。</p>
+        </div>
+    </div>
     <div id="body" style="width:100%; height:100%;">
         <div id="left-select" style="width:20%; height: 100%; float:left">
+            <label style="padding-left:15%;padding-top:15%;">过滤选项</label>
             <div id="filter1" style="padding-top:15%;padding-left:8%">
-                <p1>TBIM</p1>
+                <label>TBIM</label>
                 <select data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}">
                     <option value="a">All</option>
                     <option value="b">TBIM-1</option>
@@ -44,7 +68,7 @@
                 </select>
             </div>
             <div id="filter2" style="padding-top:15%;padding-left:8%">
-                <p1>TYPE</p1>
+                <label>TYPE</label>
                 <select data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}">
                     <option value="a">Speed</option>
                     <option value="b">Temperature</option>
@@ -52,17 +76,29 @@
                     <option value="m">Acceleration</option>
                 </select>
             </div>
-            <div id="sensor8" style="width:20%; height: 30%; padding-left:8%;">
-                <div id="switch-text" style="height:50%;text-align:center"><p1>Switch</p1></div>
-                <div id="swith-graph" style="height:15%;text-align:center"><input type="checkbox" data-am-switch data-off-color="warning" /></div>
+
+            <div id ="leftW" style="padding-top:20%;">
+            <!-- 链接触发器， href 属性为目标元素 ID -->
+
+            <a  style="padding-left:10%;" href="#doc-oc-demo1" data-am-offcanvas>更多信息</a>
+
+            <!-- 侧边栏内容 -->
+            <div id="doc-oc-demo1" class="am-offcanvas">
+                <div class="am-offcanvas-bar">
+                    <div class="am-offcanvas-content">
+                        <p>
+                            我不愿让你一个人 <br />
+                            承受这世界的残忍 <br />
+                            我不愿眼泪陪你到 永恒
+                        </p>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
 
         <div id="tbims" style="width: 80%; float: left">
-            <input type="checkbox" class="js-switch" checked />
             <script type="text/javascript" charset="utf-8">
-                var elem = document.querySelector('.js-switch', {size : 'large'});
-                var init = new Switchery(elem);
 
             </script>
         </div>
@@ -70,7 +106,7 @@
      </div>
 
     <script type="text/javascript" charset="utf-8">
-       //  createDisNode('tbims');
+         createDisNode('tbims');
         // thermometerSensor('tbims');
         // batterySensor('tbims');
        // containerSensor('tbims');

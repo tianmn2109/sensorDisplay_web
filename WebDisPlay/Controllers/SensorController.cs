@@ -54,7 +54,7 @@ namespace WebDisPlay.Controllers
         public string querySensor(string tbim, string type)
         {
             
-            string[] senType = new string[9];
+            string[] senType = new string[11];
             senType[0] = "speedSensor";
             senType[1] = "heightSensor";
             senType[2] = "temperatureSensor";
@@ -64,6 +64,8 @@ namespace WebDisPlay.Controllers
             senType[6] = "accelerateSensor";
             senType[7] = "VUSensor";
             senType[8] = "switch";
+            senType[9] = "battery";
+            senType[10] = "indicator";
 
             long tick = DateTime.Now.Ticks;
             Random ro = new Random((int)(tick & 0xffffffffL) | (int)(tick >> 32));
@@ -72,7 +74,7 @@ namespace WebDisPlay.Controllers
                 SensorDescription f = new SensorDescription();
                 f.tbim = i.ToString();
                 f.alias = i.ToString();
-                int iRan = ro.Next(0, 8);
+                int iRan = ro.Next(0, 11);
                 f.sensorType = senType[iRan];
                 list.Add(f);
             }

@@ -1,17 +1,18 @@
 //温度传感器
 function thermometerSensor(divName) {
+    var idName = 'thermometer' + divName.toString();// Math.random().toString();
     FusionCharts.ready(function () {
         var chart = new FusionCharts({
             type: 'thermometer',
             renderAt: divName,
-            id: 'temp-monitor',
-            width: '120',
-            height: '400',
+            id: idName,
+            width: '100%',
+            height: '100%',
             dataFormat: 'json',
             dataSource: {
                 "chart": {
-                    "caption": "Central cold storage",
-                    "subcaption": "Bakersfield Central",
+                    "caption": "Temperature",
+                 //   "subcaption": "Bakersfield Central",
                     "subcaptionFontBold": "0",
                     "lowerLimit": '-20',
                     "upperLimit": '20',
@@ -26,8 +27,8 @@ function thermometerSensor(divName) {
                 "rendered": function (evtObj, argObj) {
                     var intervalVar = setInterval(function () {
                         var temp = -10 + parseInt(Math.floor(Math.random() * 6), 10);
-                        FusionCharts.items["temp-monitor"].feedData("value=" + temp);
-                    }, 3000);
+                        FusionCharts.items[idName].feedData("value=" + temp);
+                    }, 500);
                 }
             }
         })
@@ -36,15 +37,16 @@ function thermometerSensor(divName) {
 }
 //容器传感器
 function containerSensor(divName) {
+    var idName = 'fuelMeter' + divName.toString();
     FusionCharts.ready(function () {
         var fuelVolume = 110,
             fuelWidget = new FusionCharts({
                 type: 'cylinder',
                 dataFormat: 'json',
-                id: 'fuelMeter',
+                id: idName,
                 renderAt: divName,
-                width: '200',
-                height: '350',
+                width: '60%',
+                height: '100%',
                 dataSource: {
                     "chart": {
                         "theme": "fint",
@@ -65,7 +67,7 @@ function containerSensor(divName) {
                         setInterval(function () {
                             (fuelVolume < 10) ? (fuelVolume = 110) : "";
                             var consVolume = fuelVolume - (Math.floor(Math.random() * 3));
-                            FusionCharts("fuelMeter").feedData("&value=" + consVolume);
+                            FusionCharts(idName).feedData("&value=" + consVolume);
                             fuelVolume = consVolume;
                         }, 1000);
                     }
@@ -76,7 +78,8 @@ function containerSensor(divName) {
 
 // 电池传感器
 
-function batterySensor(divName)  {
+function batterySensor(divName) {
+    var idName = 'battery' + divName.toString();
     FusionCharts.ready(function () {
         var chargePercent = 50,
             flag = 0,
@@ -84,85 +87,67 @@ function batterySensor(divName)  {
             chart = new FusionCharts({
                 type: 'hled',
                 renderAt: divName,
-                id : 'myHLED',
-                width: '300',
-                height: '200',
+                id: idName,
+                width: '100%',
+                height: '62%',
                 dataFormat: 'json',
                 dataSource: {
                     "chart": {
                         "caption": "Battery Charge Remaining",
                         "lowerLimit": "0",
                         "upperLimit": "100",
-                        "showTickMarks": "0",
+                        "lowerLimitDisplay": "Empty",
                         "upperLimitDisplay": "Full",
                         "numberSuffix": "%",
-                        "valueFontSize" : "12",
+                        "valueFontSize": "12",
                         "origW": "300",
                         "origH": "200",
-                        "ledGap" :"0",
+                        "ledGap": "0",
                         "showhovereffect": "1",
                         //Single Fill color
-                        "useSameFillColor" : "1",
+                        "useSameFillColor": "1",
+                        "useSameFillBgColor": "1",
+
                         "chartBottomMargin": "20",
-                        "theme" : "fint"
+                        "theme": "fint"
                     },
                     //All annotations are grouped under this element
                     "annotations": {
-                    
-                        "groups": [                        
-                            {                  
+                        "showbelow": "1",
+                        "groups": [
+                            {
                                 //Each group needs a unique ID
                                 "id": "indicator",
-                                "showbelow": "1",
                                 "items": [
-                                
+
                                     {
                                         "id": "bgRectAngle",
                                         //Polygon item 
                                         "type": "rectangle",
-                                        "radius" : "5",
-                                        "fillColor": "#333333",            
-                                        "x" : "$gaugeEndX - 10",
-                                        "tox" : "$gaugeEndX + 12",
-                                        "y" : "$gaugeCenterY-20",
-                                        "toy" : "$gaugeCenterY + 20"
-                                    }
-                                ]
-                            },
-                            {                  
-                                //Each group needs a unique ID
-                                "id": "remainingTime",
-                                "showbelow": "0",
-                                "items": [
-                                
-                                    {
-                                        "id": "remainingTxt",
-                                        //Polygon item 
-                                        "type": "text",
-                                        "text" : "",
-                                        "fontColor": "#FFFFFF",
-                                        "fontSize" : "12",
-                                        "bold" : "1",
-                                        "x" : "$gaugeCenterX",
-                                        "y" : "$gaugeCenterY",
+                                        "radius": "5",
+                                        "fillColor": "#333333",
+                                        "x": "$gaugeEndX - 10",
+                                        "tox": "$gaugeEndX + 12",
+                                        "y": "$gaugeCenterY-20",
+                                        "toy": "$gaugeCenterY + 20"
                                     }
                                 ]
                             }
                         ]
-                    
+
                     },
                     "colorRange": {
                         "color": [
                             {
                                 "minValue": "0",
-                                "maxValue": "30",
+                                "maxValue": "45",
                                 "code": "#e44a00"
-                            }, 
+                            },
                             {
-                                "minValue": "30",
+                                "minValue": "45",
                                 "maxValue": "75",
                                 "code": "#f8bd19"
-                            }, 
+                            },
                             {
                                 "minValue": "75",
                                 "maxValue": "100",
@@ -172,53 +157,113 @@ function batterySensor(divName)  {
                     },
                     "value": "50"
                 },
-                "events" :{
-                    "renderComplete" : function (evt, arg) {
-                        var chargeInterval = setInterval( function(){
-                        
-                            if(flag === 0 ){
+                "events": {
+                    "renderComplete": function (evt, arg) {
+                        var chargeInterval = setInterval(function () {
+
+                            if (flag === 0) {
                                 count++;
-                                if(count > 4){
+                                if (count > 2) {
                                     chargePercent -= 5;
                                     count = 0;
                                 }
-                            
-                                if(chargePercent === 5)
-                                {
+
+                                if (chargePercent === 5) {
                                     flag = 1;
                                 }
                             }
-                            else
-                            {
+                            else {
                                 chargePercent += 5;
-                                if(chargePercent === 100)
-                                {
+                                if (chargePercent === 100) {
                                     flag = 0;
                                 }
-                            
+
                             }
-                            FusionCharts.items["myHLED"].feedData("&value="+chargePercent);
+                            FusionCharts.items[idName].feedData("&value=" + chargePercent);
                         }, 2000);
-                    },
-                    "realTimeUpdateComplete" : function (evt, arg){
-                        var annotations = evt.sender.annotations,
-                            minutes = 2.4 * chargePercent,
-                            hr = parseInt(minutes/60),
-                            hr = (hr <= 0) ? "" : hr + ((hr === 1)? " hour " : " hours "),
-                            min = minutes % 60,
-                            min = (min <= 0) ? "" : ((min < 9) ? "0"+ min : min) + " minutes ";
-                    
-                        annotations.update('remainingTxt', {"text" : hr+ min+"remaining..."});
-                    
-                    
-                        //console.log(1);
                     }
                 }
-            
+
             })
         .render();
     });
 }
+
+//指示灯
+
+function indicatorLight(divName) {
+    var idName = 'indicator' + divName.toString();
+    FusionCharts.ready(function () {
+        var salesChart = new FusionCharts({
+            type: 'bulb',
+            renderAt: divName,
+            id: idName,
+            width: '200',
+            height: '200',
+            dataFormat: 'json',
+            dataSource: {
+                "chart": {
+                    "caption": "Temperature status of deep freezers",
+                    "upperlimit": "-5",
+                    "lowerlimit": "-60",
+                    "captionPadding": "30",
+                    "showshadow": "0",
+                    "showvalue": "1",
+                    "useColorNameAsValue": "1",
+                    "placeValuesInside": "1",
+                    "valueFontSize": "16",
+                    //Cosmetics
+                    "baseFontColor": "#333333",
+                    "baseFont": "Helvetica Neue,Arial",
+                    "captionFontSize": "14",
+                    "showborder": "0",
+                    "bgcolor": "#FFFFFF",
+                    "toolTipColor": "#ffffff",
+                    "toolTipBorderThickness": "0",
+                    "toolTipBgColor": "#000000",
+                    "toolTipBgAlpha": "80",
+                    "toolTipBorderRadius": "2",
+                    "toolTipPadding": "5",
+                },
+                "colorrange": {
+                    "color": [
+                        {
+                            "minvalue": "-60",
+                            "maxvalue": "-35",
+                            "label": "Dangerous!",
+                            "code": "#ff0000"
+                        },
+                        {
+                            "minvalue": "-35",
+                            "maxvalue": "-25",
+                            "label": "Warning",
+                            "code": "#ff9900"
+                        },
+                        {
+                            "minvalue": "-25",
+                            "maxvalue": "-5",
+                            "label": "Normal",
+                            "code": "#00ff00"
+                        }
+                    ]
+                },
+                "value": "-5"
+            },
+            "events": {
+                "rendered": function (evtObj, argObj) {
+                    setInterval(function () {
+                        var num = (Math.floor(Math.random() * 55) * -1) - 5;
+                        FusionCharts(idName).feedData("&value=" + num);
+                    }, 10000);
+                }
+            }
+        });
+        salesChart.render();
+
+    });
+
+}
+
 // 显示速度仪表盘， 
 //divID为div 的id名称， chartName为图形的名称，sAngle和eAngle分别为最大和最小角度
 function speedSensor(divID, chartName, sAngle, eAngle) {
@@ -1511,37 +1556,24 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                     console.log("sensorType = " + sensorType);
                     console.log("id = " + id);
                     var iDiv = document.createElement('div');
+                    iDiv.style.textAlign = "center";
+                    iDiv.style.verticalAlign = "center";
+                    iDiv.id = id.toString();
+                    iDiv.style.marginLeft = "60px";
+                    iDiv.style.marginTop = "60px";
+                    iDiv.style.width = "20%";
+                    iDiv.style.height = "29%";
+                    iDiv.style.cssFloat = "left";
+                    iDiv.style.styleFloat = "left";
+
                     console.log("******************1");
                     if (sensorType == "speedSensor" || sensorType == "heightSensor" || sensorType == "temperatureSensor"
                         || sensorType == "pressureSensor" || sensorType == "FuelQuantitySensor" || sensorType == "solidGague"
-                        || sensorType == "accelerateSensor" || sensorType == "VUSensor") {
-                        iDiv.id = id.toString();
-                        iDiv.style.width = "20%";
-                        iDiv.style.height = "30%";
-                        iDiv.style.cssFloat = "left";
-                        iDiv.style.styleFloat = "left";
+                        || sensorType == "accelerateSensor" || sensorType == "VUSensor" || sensorType == "battery" || sensorType == "indicator") {
+                        
                     }
                     else if (sensorType == "switch") {
-                        iDiv.id = id.toString();
-                        iDiv.style.width = "20%";
-                        iDiv.style.height = "30%";
-                        iDiv.style.cssFloat = "left";
-                        iDiv.style.styleFloat = "left";
-
-                        var child1 = document.createElement('div');
-                        child1.id = "switch-text";
-                        child1.style.height = "50%";
-                        child1.style.textAlign = "center";
-                        child1.innerHTML = "<p1>Switch</p1>";
-
-                        var child2 = document.createElement('div');
-                        child2.id = "swith-graph";
-                        child2.style.height = "15%";
-                        child2.style.textAlign = "center";
-                        child2.innerHTML = " <input id=\"switch-state\" type=\"checkbox\" checked>";
-
-                        iDiv.appendChild(child1);
-                        iDiv.appendChild(child2);
+                        addsSwitchSensor(iDiv, id.toString());
                     }
                     // Then append the whole thing onto the body
                     console.log("******************2");
@@ -1554,13 +1586,13 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                         heightSensor(id.toString(), 'Height', -150, 150);
                     }
                     else if (sensorType == "temperatureSensor") {
-                        temperatureSensor(id.toString(), 'Temperature', -150, 150);
+                        thermometerSensor(id.toString());
                     }
                     else if (sensorType == "pressureSensor") {
                         pressureSensor(id.toString(), 'Pressure', -150, 150);
                     }
                     else if (sensorType == "FuelQuantitySensor") {
-                        fuelSensor(id.toString(), 'Pressure', -150, 150);
+                        containerSensor(id.toString());
                     }
                     else if (sensorType == "accelerateSensor") {
                         accelerateSensor(id.toString(), 'Pressure', -150, 150);
@@ -1572,6 +1604,14 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                         solidGague(id.toString());
                     }
                     else if (sensorType == "switch") {
+                        var elem = document.querySelector('.switch-' + id.toString(), { size: 'large' });
+                        var init = new Switchery(elem);
+                    }
+                    else if (sensorType == "battery") {
+                        batterySensor(id.toString());
+                    }
+                    else if (sensorType == "indicator") {
+                        indicatorLight(id.toString());
                     }
                     console.log("******************4");
                 }
@@ -1685,7 +1725,21 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
         head.appendChild(script);
     }
 
+    function addsSwitchSensor(iDiv, id) {
 
+        child1 = document.createElement("div");
+        child1.style.textAlign = "center";
+        child1.style.height = "50%";
+        child1.innerHTML = "<p1>Switch</p1>";
+
+        child2 = document.createElement("div");
+        child2.style.textAlign = "center";
+        child2.style.height = "70%";
+        child2.innerHTML = " <input type=\"checkbox\" class=\"switch-" + id.toString() + "\"  checked />";
+
+        iDiv.appendChild(child1);
+        iDiv.appendChild(child2);
+    }
 
 
 
