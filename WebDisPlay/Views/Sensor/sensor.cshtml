@@ -60,16 +60,13 @@
             <label style="padding-left:15%;padding-top:15%;">过滤选项</label>
             <div id="filter1" style="padding-top:15%;padding-left:8%">
                 <label>TBIM</label>
-                <select id="select_tbim" data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}">
+                <select id="select_tbim" onchange="getSelectedSensor()" data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}">
                     <option value="a">All</option>
                 </select>
-                <script type="text/javascript">
-                    addSelectTBIM(select_tbim);
-                </script>
             </div>
             <div id="filter2" style="padding-top:15%;padding-left:8%">
                 <label>TYPE</label>
-                <select id="select_type" data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}">
+                <select id="select_type" onchange="getSelectedSensor()" data-am-selected="{btnWidth: '40%', btnSize: 'sm', btnStyle: 'secondary'}">
                     <option value="a">ALL</option>
                     <option value="a">Speed</option>
                     <option value="b">Temperature</option>
@@ -94,6 +91,7 @@
                                 承受这世界的残忍 <br />
                                 我不愿眼泪陪你到 永恒
                             </p>
+                            
                         </div>
                     </div>
                 </div>
@@ -113,7 +111,10 @@
     </div>
 
     <script type="text/javascript" charset="utf-8">
+        
         createDisNode('tbims', select_tbim, select_type);
+        addSelectTBIM(select_tbim);
+        getSelectedSensor();
         // thermometerSensor('tbims');
         // batterySensor('tbims');
         // containerSensor('tbims');

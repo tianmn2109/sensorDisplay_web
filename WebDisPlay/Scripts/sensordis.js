@@ -1,7 +1,7 @@
 //温度传感器
-function thermometerSensor(divName) {
+function thermometerSensor(divName, tbim, alias) {
     var idName = 'thermometer' + divName.toString();// Math.random().toString();
-    FusionCharts.ready(function () {
+    $(document).ready(function () {
         var chart = new FusionCharts({
             type: 'thermometer',
             renderAt: divName,
@@ -27,9 +27,46 @@ function thermometerSensor(divName) {
             "events": {
                 "rendered": function (evtObj, argObj) {
                     var intervalVar = setInterval(function () {
-                        var temp = -10 + parseInt(Math.floor(Math.random() * 6), 10);
-                        FusionCharts.items[idName].feedData("value=" + temp);
-                    }, 500);
+                        // var requestURL = createXmlHttpRequest();
+                        requestURL = 'http://localhost:11643/Sensor/querySensorValue';
+                        var strSelect = "123";
+                        requestURL = addURLParam(requestURL, "tbim", tbim);
+                        requestURL = addURLParam(requestURL, "alias", alias);
+                        console.log(requestURL);
+                        var xmlhttp = new XMLHttpRequest();
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                data = xmlhttp.responseText;
+                                console.log("hello for feature2");
+                                console.log(data);
+                                sss = JSON.parse(xmlhttp.responseText);
+                                console.log("height");
+                                // console.log(sss);
+                                data = sss;
+
+                                var d = JSON.parse(data, function (key, value) {
+                                    //  console.log("key = %s", key);
+                                    //  console.log(" value = %s\n", value);
+                                    if (key == "value") {
+                                        return parseFloat(value);
+                                    }
+                                    return value;
+                                });
+                                console.log(d[0]["value"]);
+                                var newValue = d[0]["value"];
+                                console.log(newValue);
+                                FusionCharts.items[idName].feedData("value=" + newValue);
+                                /* */
+                               // point.update(newValue);
+                            }
+                        }
+                        xmlhttp.open("post", requestURL, true);
+
+                        xmlhttp.send();
+                    //    var temp = -10 + parseInt(Math.floor(Math.random() * 6), 10);
+                    //    FusionCharts.items[idName].feedData("value=" + temp);
+                    }, 1000);
                 }
             }
         })
@@ -37,9 +74,9 @@ function thermometerSensor(divName) {
     });
 }
 //容器传感器
-function containerSensor(divName) {
+function containerSensor(divName, tbim, alias) {
     var idName = 'fuelMeter' + divName.toString();
-    FusionCharts.ready(function () {
+    $(document).ready(function () {
         var fuelVolume = 110,
             fuelWidget = new FusionCharts({
                 type: 'cylinder',
@@ -67,10 +104,47 @@ function containerSensor(divName) {
                 "events": {
                     "rendered": function (evtObj, argObj) {
                         setInterval(function () {
-                            (fuelVolume < 10) ? (fuelVolume = 110) : "";
-                            var consVolume = fuelVolume - (Math.floor(Math.random() * 3));
-                            FusionCharts(idName).feedData("&value=" + consVolume);
-                            fuelVolume = consVolume;
+                            // var requestURL = createXmlHttpRequest();
+                            requestURL = 'http://localhost:11643/Sensor/querySensorValue';
+                            var strSelect = "123";
+                            requestURL = addURLParam(requestURL, "tbim", tbim);
+                            requestURL = addURLParam(requestURL, "alias", alias);
+                            console.log(requestURL);
+                            var xmlhttp = new XMLHttpRequest();
+
+                            xmlhttp.onreadystatechange = function () {
+                                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                    data = xmlhttp.responseText;
+                                    console.log("hello for feature2");
+                                    console.log(data);
+                                    sss = JSON.parse(xmlhttp.responseText);
+                                    console.log("height");
+                                    // console.log(sss);
+                                    data = sss;
+
+                                    var d = JSON.parse(data, function (key, value) {
+                                        //  console.log("key = %s", key);
+                                        //  console.log(" value = %s\n", value);
+                                        if (key == "value") {
+                                            return parseFloat(value);
+                                        }
+                                        return value;
+                                    });
+                                    console.log(d[0]["value"]);
+                                    var newValue = d[0]["value"];
+                                    console.log(newValue);
+                                    FusionCharts.items[idName].feedData("&value=" + newValue);
+                                    /* */
+                                    // point.update(newValue);
+                                }
+                            }
+                            xmlhttp.open("post", requestURL, true);
+
+                            xmlhttp.send();
+                       //     (fuelVolume < 10) ? (fuelVolume = 110) : "";
+                       //     var consVolume = fuelVolume - (Math.floor(Math.random() * 3));
+                       //     FusionCharts(idName).feedData("&value=" + consVolume);
+                       //     fuelVolume = consVolume;
                         }, 1000);
                     }
                 }
@@ -80,9 +154,9 @@ function containerSensor(divName) {
 
 // 电池传感器
 
-function batterySensor(divName) {
+function batterySensor(divName, tbim, alias) {
     var idName = 'battery' + divName.toString();
-    FusionCharts.ready(function () {
+    $(document).ready(function () {
         var chargePercent = 50,
             flag = 0,
             count = 0,
@@ -164,24 +238,43 @@ function batterySensor(divName) {
                     "renderComplete": function (evt, arg) {
                         var chargeInterval = setInterval(function () {
 
-                            if (flag === 0) {
-                                count++;
-                                if (count > 2) {
-                                    chargePercent -= 5;
-                                    count = 0;
-                                }
+                            // var requestURL = createXmlHttpRequest();
+                            requestURL = 'http://localhost:11643/Sensor/querySensorValue';
+                            var strSelect = "123";
+                            requestURL = addURLParam(requestURL, "tbim", tbim);
+                            requestURL = addURLParam(requestURL, "alias", alias);
+                            console.log(requestURL);
+                            var xmlhttp = new XMLHttpRequest();
 
-                                if (chargePercent === 5) {
-                                    flag = 1;
+                            xmlhttp.onreadystatechange = function () {
+                                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                    data = xmlhttp.responseText;
+                                    console.log("hello for feature2");
+                                    console.log(data);
+                                    sss = JSON.parse(xmlhttp.responseText);
+                                    console.log("height");
+                                    // console.log(sss);
+                                    data = sss;
+
+                                    var d = JSON.parse(data, function (key, value) {
+                                        //  console.log("key = %s", key);
+                                        //  console.log(" value = %s\n", value);
+                                        if (key == "value") {
+                                            return parseFloat(value);
+                                        }
+                                        return value;
+                                    });
+                                    console.log(d[0]["value"]);
+                                    var newValue = d[0]["value"];
+                                    console.log(newValue);
+                                    FusionCharts.items[idName].feedData("value=" + newValue);
+                                    /* */
+                                    // point.update(newValue);
                                 }
                             }
-                            else {
-                                chargePercent += 5;
-                                if (chargePercent === 100) {
-                                    flag = 0;
-                                }
+                            xmlhttp.open("post", requestURL, true);
 
-                            }
+                            xmlhttp.send();
                             FusionCharts.items[idName].feedData("&value=" + chargePercent);
                         }, 2000);
                     }
@@ -194,9 +287,9 @@ function batterySensor(divName) {
 
 //指示灯
 
-function indicatorLight(divName) {
+function indicatorLight(divName, tbim, alias) {
     var idName = 'indicator' + divName.toString();
-    FusionCharts.ready(function () {
+    $(document).ready(function () {
         var salesChart = new FusionCharts({
             type: 'bulb',
             renderAt: divName,
@@ -256,8 +349,46 @@ function indicatorLight(divName) {
             "events": {
                 "rendered": function (evtObj, argObj) {
                     setInterval(function () {
-                        var num = (Math.floor(Math.random() * 55) * -1) - 5;
-                        FusionCharts(idName).feedData("&value=" + num);
+                        // var requestURL = createXmlHttpRequest();
+                        requestURL = 'http://localhost:11643/Sensor/querySensorValue';
+                        var strSelect = "123";
+                        requestURL = addURLParam(requestURL, "tbim", tbim);
+                        requestURL = addURLParam(requestURL, "alias", alias);
+                        console.log(requestURL);
+                        var xmlhttp = new XMLHttpRequest();
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                data = xmlhttp.responseText;
+                                console.log("hello for feature2");
+                                console.log(data);
+                                sss = JSON.parse(xmlhttp.responseText);
+                                console.log("height");
+                                // console.log(sss);
+                                data = sss;
+
+                                var d = JSON.parse(data, function (key, value) {
+                                    //  console.log("key = %s", key);
+                                    //  console.log(" value = %s\n", value);
+                                    if (key == "value") {
+                                        return parseFloat(value);
+                                    }
+                                    return value;
+                                });
+                                console.log(d[0]["value"]);
+                                var newValue = d[0]["value"];
+                                console.log(newValue);
+                                FusionCharts.items[idName].feedData("value=" + newValue);
+                                /* */
+                                // point.update(newValue);
+                             //   FusionCharts(idName).feedData("&value=" + newValue);
+                            }
+                        }
+                        xmlhttp.open("post", requestURL, true);
+
+                        xmlhttp.send();
+                      //  FusionCharts.items[idName].feedData("&value=" + chargePercent);
+                        
                     }, 10000);
                 }
             }
@@ -270,7 +401,7 @@ function indicatorLight(divName) {
 
 // 显示速度仪表盘， 
 //divID为div 的id名称， chartName为图形的名称，sAngle和eAngle分别为最大和最小角度
-function speedSensor(divID, chartName, sAngle, eAngle) {
+function speedSensor(divID, chartName, sAngle, eAngle, tbim, alias) {
     //var divID = 'sensor1';
     $(document).ready(function () {
         chart = new Highcharts.Chart({
@@ -393,8 +524,8 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                // var requestURL = createXmlHttpRequest();
                requestURL = 'http://localhost:11643/Sensor/querySensorValue';
                var strSelect = "123";
-               requestURL = addURLParam(requestURL, "tbim", strSelect);
-               requestURL = addURLParam(requestURL, "alias", strSelect);
+               requestURL = addURLParam(requestURL, "tbim", tbim);
+               requestURL = addURLParam(requestURL, "alias", alias);
                console.log(requestURL);
                var xmlhttp = new XMLHttpRequest();
 
@@ -437,7 +568,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
 
 
     //height
-    function heightSensor(divID, chartName, sAngle, eAngle) {
+    function heightSensor(divID, chartName, sAngle, eAngle, tbim, alias) {
         //var divID = 'sensor1';
         $(document).ready(function () {
             chart = new Highcharts.Chart({
@@ -560,8 +691,8 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                    // var requestURL = createXmlHttpRequest();
                    requestURL = 'http://localhost:11643/Sensor/querySensorValue';
                    var strSelect = "123";
-                   requestURL = addURLParam(requestURL, "tbim", strSelect);
-                   requestURL = addURLParam(requestURL, "alias", strSelect);
+                   requestURL = addURLParam(requestURL, "tbim", tbim);
+                   requestURL = addURLParam(requestURL, "alias", alias);
                    console.log(requestURL);
                    var xmlhttp = new XMLHttpRequest();
 
@@ -603,7 +734,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
     }
 
     //acceleration
-    function accelerateSensor(divID, chartName, sAngle, eAngle) {
+    function accelerateSensor(divID, chartName, sAngle, eAngle, tbim, alias) {
         //var divID = 'sensor1';
         $(document).ready(function () {
             chart = new Highcharts.Chart({
@@ -726,8 +857,8 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                    // var requestURL = createXmlHttpRequest();
                    requestURL = 'http://localhost:11643/Sensor/querySensorValue';
                    var strSelect = "123";
-                   requestURL = addURLParam(requestURL, "tbim", strSelect);
-                   requestURL = addURLParam(requestURL, "alias", strSelect);
+                   requestURL = addURLParam(requestURL, "tbim", tbim);
+                   requestURL = addURLParam(requestURL, "alias", alias);
                    console.log(requestURL);
                    var xmlhttp = new XMLHttpRequest();
 
@@ -770,7 +901,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
 
 
     //temperature
-    function temperatureSensor(divID, chartName, sAngle, eAngle) {
+    function temperatureSensor(divID, chartName, sAngle, eAngle, tbim, alias) {
         //var divID = 'sensor1';
         $(document).ready(function () {
             chart = new Highcharts.Chart({
@@ -893,8 +1024,8 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                    // var requestURL = createXmlHttpRequest();
                    requestURL = 'http://localhost:11643/Sensor/querySensorValue';
                    var strSelect = "123";
-                   requestURL = addURLParam(requestURL, "tbim", strSelect);
-                   requestURL = addURLParam(requestURL, "alias", strSelect);
+                   requestURL = addURLParam(requestURL, "tbim", tbim);
+                   requestURL = addURLParam(requestURL, "alias", alias);
                    console.log(requestURL);
                    var xmlhttp = new XMLHttpRequest();
 
@@ -1104,7 +1235,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
 
 
     //pressure
-    function pressureSensor(divID, chartName, sAngle, eAngle) {
+    function pressureSensor(divID, chartName, sAngle, eAngle, tbim, alias) {
         //var divID = 'sensor1';
         $(document).ready(function () {
             chart = new Highcharts.Chart({
@@ -1227,8 +1358,8 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                    // var requestURL = createXmlHttpRequest();
                    requestURL = 'http://localhost:11643/Sensor/querySensorValue';
                    var strSelect = "123";
-                   requestURL = addURLParam(requestURL, "tbim", strSelect);
-                   requestURL = addURLParam(requestURL, "alias", strSelect);
+                   requestURL = addURLParam(requestURL, "tbim", tbim);
+                   requestURL = addURLParam(requestURL, "alias", alias);
                    console.log(requestURL);
                    var xmlhttp = new XMLHttpRequest();
 
@@ -1270,7 +1401,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
     }
 
 
-    function VUmeter(divID) {
+    function VUmeter(divID, tbim, alias) {
         $(document).ready(function () {
             chart = new Highcharts.Chart({
            
@@ -1287,7 +1418,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                         ]
                     },
                     plotBackgroundImage: null,
-                    height: 220,
+                    height: 240,
                 },
 
                 title: {
@@ -1299,7 +1430,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                     endAngle: 45,
                     background: null,
                     center: ['50%', '135%'],
-                    size: 200
+                    size: 280
                 }],
 
                 tooltip: {
@@ -1357,26 +1488,51 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
             function (chart) {
                 setInterval(function () {
                     if (chart.series) { // the chart may be destroyed
-                        var left = chart.series[0].points[0],
-                         //   right = chart.series[1].points[0],
-                            leftVal,
-                            rightVal,
-                            inc = (Math.random() - 0.5) * 3;
+                        requestURL = 'http://localhost:11643/Sensor/querySensorValue';
+                        var strSelect = "123";
+                        requestURL = addURLParam(requestURL, "tbim", tbim);
+                        requestURL = addURLParam(requestURL, "alias", alias);
+                        console.log(requestURL);
+                        var xmlhttp = new XMLHttpRequest();
 
-                        leftVal = left.y + inc;
-                        //     rightVal = leftVal + inc / 3;
-                        if (leftVal < -20 || leftVal > 6) {
-                            leftVal = left.y - inc;
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                data = xmlhttp.responseText;
+                                console.log("hello for feature2");
+                                console.log(data);
+                                sss = JSON.parse(xmlhttp.responseText);
+                                console.log("height");
+                                // console.log(sss);
+                                data = sss;
+
+                                var d = JSON.parse(data, function (key, value) {
+                                    //  console.log("key = %s", key);
+                                    //  console.log(" value = %s\n", value);
+                                    if (key == "value") {
+                                        return parseFloat(value);
+                                    }
+                                    return value;
+                                });
+                                console.log(d[0]["value"]);
+                                var newValue = d[0]["value"];
+                                console.log(newValue);
+                                var left = chart.series[0].points[0];
+                                left.update(newValue, false);
+                                chart.redraw();
+                                /* */
+                               // point.update(newValue);
+                            }
                         }
-                        //     if (rightVal < -20 || rightVal > 6) {
-                        //         rightVal = leftVal;
-                        //     }
+                        xmlhttp.open("post", requestURL, true);
 
-                        left.update(leftVal, false);
+                        xmlhttp.send();
+                        //   point.update(newVal);
+
+                       // left.update(leftVal, false);
                         //    right.update(rightVal, false);
-                        chart.redraw();
+                        
                     }
-                }, 500);
+                }, 1000);
 
             }
                 );
@@ -1386,7 +1542,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
 
     }
 
-    function solidGague(divID) {
+    function solidGague(divID, tbim, alias) {
         $(document).ready(function () {
             chart = new Highcharts.Chart({
 
@@ -1470,23 +1626,45 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
 
                     setInterval(function () {
                         // Speed
-                        var point,
-                            newVal,
-                            inc;
+                        requestURL = 'http://localhost:11643/Sensor/querySensorValue';
+                        var strSelect = "123";
+                        requestURL = addURLParam(requestURL, "tbim", tbim);
+                        requestURL = addURLParam(requestURL, "alias", alias);
+                        console.log(requestURL);
+                        var xmlhttp = new XMLHttpRequest();
 
-                        if (chart) {
-                            point = chart.series[0].points[0];
-                            inc = Math.round((Math.random() - 0.5) * 100);
-                            newVal = point.y + inc;
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                if (chart) {
+                                    data = xmlhttp.responseText;
+                                    console.log("hello for feature2");
+                                    console.log(data);
+                                    sss = JSON.parse(xmlhttp.responseText);
+                                    console.log("height");
+                                    // console.log(sss);
+                                    data = sss;
 
-                            if (newVal < 0 || newVal > 200) {
-                                newVal = point.y - inc;
+                                    var d = JSON.parse(data, function (key, value) {
+                                        //  console.log("key = %s", key);
+                                        //  console.log(" value = %s\n", value);
+                                        if (key == "value") {
+                                            return parseFloat(value);
+                                        }
+                                        return value;
+                                    });
+                                    console.log(d[0]["value"]);
+                                    var newValue = d[0]["value"];
+                                    console.log(newValue);
+                                    point = chart.series[0].points[0];
+                                    point.update(newValue);
+                                }
                             }
-
-                            point.update(newVal);
                         }
+                        xmlhttp.open("post", requestURL, true);
 
-                    }, 2000);
+                        xmlhttp.send();
+
+                    }, 1000);
 
                 }
             );
@@ -1536,6 +1714,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
         requestURL = addURLParam(requestURL, strTBIM, strSelect);
         requestURL = addURLParam(requestURL, strTYPE, strSelect);
         console.log(requestURL);
+        $('#' + divName).empty();
         var xmlhttp = new XMLHttpRequest();
 
         xmlhttp.onreadystatechange = function () {
@@ -1559,6 +1738,8 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                 for (i = 0 ; i < d.length; i++) {
                     var sensorType = d[i]["sensorType"];
                     var id = d[i]["tbim"] * 256 + d[i]["alias"];
+                    var tb = d[i]["tbim"].toString();
+                    var al = d[i]["alias"].toString();
                     console.log("sensorType = " + sensorType);
                     console.log("id = " + id);
                     var iDiv = document.createElement('div');
@@ -1586,38 +1767,38 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                     document.getElementById(divName).appendChild(iDiv);
                     console.log("******************3");
                     if (sensorType == "speedSensor") {
-                        speedSensor(id.toString(), 'Speed', -150, 150);
+                        speedSensor(id.toString(), 'Speed', -150, 150, tb, al);
                     }
                     else if (sensorType == "heightSensor") {
-                        heightSensor(id.toString(), 'Height', -150, 150);
+                        heightSensor(id.toString(), 'Height', -150, 150, tb, al);
                     }
                     else if (sensorType == "temperatureSensor") {
-                        thermometerSensor(id.toString());
+                        thermometerSensor(id.toString(), tb, al);
                     }
                     else if (sensorType == "pressureSensor") {
-                        pressureSensor(id.toString(), 'Pressure', -150, 150);
+                        pressureSensor(id.toString(), 'Pressure', -150, 150, tb, al);
                     }
                     else if (sensorType == "FuelQuantitySensor") {
-                        containerSensor(id.toString());
+                        containerSensor(id.toString(), tb, al);
                     }
                     else if (sensorType == "accelerateSensor") {
-                        accelerateSensor(id.toString(), 'Pressure', -150, 150);
+                      //  accelerateSensor(id.toString(), 'Pressure', -150, 150, tb, al);
                     }
-                    else if (sensorType == "VUSensor") {
-                        VUmeter(id.toString());
+                    else if (sensorType == "VUSensor") {    
+                        VUmeter(id.toString(), tb, al);
                     }
                     else if (sensorType == "solidGague") {
-                        solidGague(id.toString());
+                        solidGague(id.toString(), tb, al);
                     }
                     else if (sensorType == "switch") {
                         var elem = document.querySelector('.switch-' + id.toString(), { size: 'large' });
                         var init = new Switchery(elem);
                     }
                     else if (sensorType == "battery") {
-                        batterySensor(id.toString());
+                        batterySensor(id.toString(), tb, al);
                     }
                     else if (sensorType == "indicator") {
-                        indicatorLight(id.toString());
+                        indicatorLight(id.toString(), tb, al);
                     }
                     console.log("******************4");
                 }
@@ -1785,4 +1966,12 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
         xmlhttp.send();
     }
 
-
+    function getSelectedSensor() {
+        var tbim = document.getElementById("select_tbim");
+        var type = document.getElementById("select_type");
+       // var strTBIM = tbim.options[tbim.selectedIndex].text;
+       // var strTYPE = type.options[type.selectedIndex].text;
+     //   createDisNode('tbims', tbim, type);
+       // console.log(strTBIM);
+       // console.log(strTYPE);
+    }
