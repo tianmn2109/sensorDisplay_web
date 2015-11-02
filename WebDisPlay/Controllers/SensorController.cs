@@ -53,7 +53,7 @@ namespace WebDisPlay.Controllers
 
         public string querySensor(string tbim, string type)
         {
-            
+
             string[] senType = new string[11];
             senType[0] = "speedSensor";
             senType[1] = "heightSensor";
@@ -78,10 +78,22 @@ namespace WebDisPlay.Controllers
                 f.sensorType = senType[iRan];
                 list.Add(f);
             }
-            
+
             string json = new JavaScriptSerializer().Serialize(list);
             return json;
 
+        }
+        public ActionResult queryTBIM()
+        {
+            List<string> list = new List<string>();
+            list.Add("TBIM-1");
+            list.Add("TBIM-2");
+            list.Add("TBIM-3");
+            list.Add("TBIM-4");
+            list.Add("TBIM-5");
+            list.Add("TBIM-6");
+            string json = new JavaScriptSerializer().Serialize(list);
+            return Json(json, JsonRequestBehavior.AllowGet);
         }
         public ActionResult querySensorType(object sender, EventArgs e)
         {
@@ -92,7 +104,7 @@ namespace WebDisPlay.Controllers
         }
 
     }
-    
+
     public class SensorInfo {
         public int tbim;
         public int alias;
@@ -105,5 +117,9 @@ namespace WebDisPlay.Controllers
         public string tbim;
         public string alias;
         public string sensorType;
+    }
+
+    public class tbim {
+        public string id;
     }
 }

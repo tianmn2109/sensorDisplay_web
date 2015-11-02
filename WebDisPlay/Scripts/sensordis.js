@@ -6,8 +6,8 @@ function thermometerSensor(divName) {
             type: 'thermometer',
             renderAt: divName,
             id: idName,
-            width: '100%',
-            height: '100%',
+            width: '200',
+            height: '290',
             dataFormat: 'json',
             dataSource: {
                 "chart": {
@@ -19,7 +19,8 @@ function thermometerSensor(divName) {
                     "numberSuffix": "°„C",
                     "bgColor": "#ffffff",
                     "showBorder": "0",
-                    "thmFillColor": "#008ee4"
+                    "thmFillColor": "#008ee4",
+                    "captionPadding": "30",
                 },
                 "value": "-10"
             },
@@ -45,8 +46,8 @@ function containerSensor(divName) {
                 dataFormat: 'json',
                 id: idName,
                 renderAt: divName,
-                width: '60%',
-                height: '100%',
+                width: '180',
+                height: '305',
                 dataSource: {
                     "chart": {
                         "theme": "fint",
@@ -58,7 +59,8 @@ function containerSensor(divName) {
                         "upperLimitDisplay": "Full",
                         "numberSuffix": " L",
                         "showValue": "1",
-                        "chartBottomMargin": "25"
+                        "chartBottomMargin": "25",
+                        "captionPadding": "30",
                     },
                     "value": "110"
                 },
@@ -88,8 +90,8 @@ function batterySensor(divName) {
                 type: 'hled',
                 renderAt: divName,
                 id: idName,
-                width: '100%',
-                height: '62%',
+                width: '225',
+                height: '280',
                 dataFormat: 'json',
                 dataSource: {
                     "chart": {
@@ -109,7 +111,8 @@ function batterySensor(divName) {
                         "useSameFillBgColor": "1",
 
                         "chartBottomMargin": "20",
-                        "theme": "fint"
+                        "theme": "fint",
+                        "captionPadding": "120",
                     },
                     //All annotations are grouped under this element
                     "annotations": {
@@ -198,8 +201,8 @@ function indicatorLight(divName) {
             type: 'bulb',
             renderAt: divName,
             id: idName,
-            width: '200',
-            height: '200',
+            width: '180',
+            height: '350',
             dataFormat: 'json',
             dataSource: {
                 "chart": {
@@ -224,6 +227,7 @@ function indicatorLight(divName) {
                     "toolTipBgAlpha": "80",
                     "toolTipBorderRadius": "2",
                     "toolTipPadding": "5",
+                    "captionPadding": "120",
                 },
                 "colorrange": {
                     "color": [
@@ -1283,7 +1287,7 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                         ]
                     },
                     plotBackgroundImage: null,
-                    height: 250
+                    height: 220,
                 },
 
                 title: {
@@ -1294,8 +1298,8 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                     startAngle: -45,
                     endAngle: 45,
                     background: null,
-                    center: ['50%', '145%'],
-                    size: 300
+                    center: ['50%', '135%'],
+                    size: 200
                 }],
 
                 tooltip: {
@@ -1523,12 +1527,14 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
         head.appendChild(script);
     }
 
-    function createDisNode(divName) {
+    function createDisNode(divName, tbim, type) {
 
         requestURL = 'http://localhost:11643/Sensor/querySensorType';
         var strSelect = "123";
-        requestURL = addURLParam(requestURL, "tbim", strSelect);
-        requestURL = addURLParam(requestURL, "type", strSelect);
+        var strTBIM = tbim.options[tbim.selectedIndex].text;
+        var strTYPE = type.options[type.selectedIndex].text;
+        requestURL = addURLParam(requestURL, strTBIM, strSelect);
+        requestURL = addURLParam(requestURL, strTYPE, strSelect);
         console.log(requestURL);
         var xmlhttp = new XMLHttpRequest();
 
@@ -1561,8 +1567,8 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
                     iDiv.id = id.toString();
                     iDiv.style.marginLeft = "60px";
                     iDiv.style.marginTop = "60px";
-                    iDiv.style.width = "20%";
-                    iDiv.style.height = "29%";
+                    iDiv.style.width = "250";
+                    iDiv.style.height = "320";
                     iDiv.style.cssFloat = "left";
                     iDiv.style.styleFloat = "left";
 
@@ -1741,5 +1747,42 @@ function speedSensor(divID, chartName, sAngle, eAngle) {
         iDiv.appendChild(child2);
     }
 
+    function addSelectTBIM(iDiv) {
+        //select_tbim.options.add(new Option("test"));
+        requestURL = 'http://localhost:11643/Sensor/queryTBIM';
+        //var strSelect = "123";
+        //requestURL = addURLParam(requestURL, "tbim", strSelect);
+        //requestURL = addURLParam(requestURL, "alias", strSelect);
+       // console.log(requestURL);
+        var xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                data = xmlhttp.responseText;
+              //  console.log("hello for feature2");
+              //  console.log(data);
+                sss = JSON.parse(xmlhttp.responseText);
+               // console.log("height");
+                // console.log(sss);
+                data = sss;
+
+                var d = JSON.parse(data, function (key, value) {
+                    //  console.log("key = %s", key);
+                    //  console.log(" value = %s\n", value);
+                    return value;
+                });
+             //   console.log(d[0]["value"]);
+             //   var newValue = d[0]["value"];
+                //  console.log(newValue);
+                console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                for (i = 0; i < d.length; i++) {
+                    iDiv.options.add(new Option(d[i].toString()));
+                }
+            }
+        }
+        xmlhttp.open("post", requestURL, true);
+
+        xmlhttp.send();
+    }
 
 
